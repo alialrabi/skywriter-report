@@ -13,7 +13,8 @@ buildscript {
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
-
+    
+    
 plugins {
     id "org.sonarqube" version "2.5"
     id "net.ltgt.apt" version "0.11"
@@ -155,6 +156,12 @@ repositories {
 }
 
 dependencies {
+    compile "org.mongodb:mongo-java-driver:3.6.1"
+    compile "org.olap4j:olap4j:1.2.0"
+    compile "net.sf.jasperreports:jasperreports:6.3.0"
+    compile "jaxen:jaxen:1.1.6"
+    compile "com.sun.jersey:jersey-client:1.19.4"
+    compile "com.sun.jersey.contribs:jersey-apache-client:1.19.4"
     compile "io.github.jhipster:jhipster"
     compile "io.dropwizard.metrics:metrics-core"
     compile "io.dropwizard.metrics:metrics-jcache"

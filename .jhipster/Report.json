@@ -1,0 +1,64 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "reportparameter",
+            "otherEntityName": "reportparameter",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "report"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "reporttemplatename",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "reportoutputtypecode",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "lastmodifiedby",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "lastmodifieddatetime",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "domain",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180107090627",
+    "dto": "mapstruct",
+    "service": "no",
+    "entityTableName": "report",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination",
+    "microserviceName": "report",
+    "searchEngine": "elasticsearch"
+}

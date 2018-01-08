@@ -40,8 +40,8 @@ spring:
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:postgresql://localhost:5432/report
-        username: report
-        password:
+        username: postgres
+        password: postgres
     jpa:
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
         database: POSTGRESQL
@@ -78,6 +78,17 @@ spring:
 
 liquibase:
     contexts: dev
+    
+  
+jasper: 
+    serverUrl: http://localhost:8086/jasperserver/
+    serverUser: jasperadmin
+    serverPassword: jasperadmin  
+    jrxmlpath: src/main/resources/jrxml/
+    reportpath: src/main/resources/reports/
+    reportingengine: jasperengine
+  #  reportingengine: jasperserver
+     
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
