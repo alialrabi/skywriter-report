@@ -23,6 +23,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -180,12 +182,11 @@ public class ReportResource {
      * @param response
      * @throws Exception
      */
-    @GetMapping("/generateReport/{reportId}/{parameters}")
+    @PostMapping("/generateReport")
     @Timed
-    public void generateReport(@PathVariable("reportId") String reportId,
-   	                    @PathVariable("parameters") String parameters,
-                       HttpServletResponse response
-                 ) throws Exception {
+    public void generateReport(MultipartHttpServletRequest request) throws Exception {
+    	 String reportId=request.getParameter("reportId");
+    	 String parameters=request.getParameter("parameters");
          Report report = reportRepository.findOne(Long.parseLong(reportId));
          generateReportFile.generateReport(report, parameters);
 
