@@ -51,6 +51,11 @@
         {
             "fieldName": "domain",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "reportfile",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
         }
     ],
     "changelogDate": "20180107090627",

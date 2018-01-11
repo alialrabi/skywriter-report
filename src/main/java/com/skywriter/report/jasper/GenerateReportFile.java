@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +102,7 @@ public class GenerateReportFile {
 	 * @throws JsonMappingException 
 	 * @throws JsonParseException 
 	 */
-	public void generateReportEngine(Report report,String params) throws JRException, JsonParseException, JsonMappingException, IOException{
+	public byte[] generateReportEngine(Report report,String params) throws JRException, JsonParseException, JsonMappingException, IOException{
 		DBConnection connection=new DBConnection();
 				
 		JasperReport jasperReport = JasperCompileManager
@@ -116,20 +117,30 @@ public class GenerateReportFile {
 	       JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,
 	               parametersMap, connection.getConnection());
 
-	       JasperExportManager.exportReportToPdfFile(jasperPrint,
-	               jasperConfiguration.getReportpath()+report.getReporttemplatename()+"."+report.getReportoutputtypecode());
+	       //Insert to Resources directory
+	       //JasperExportManager.exportReportToPdfFile(jasperPrint,
+	         //      jasperConfiguration.getReportpath()+report.getReporttemplatename()+"."+report.getReportoutputtypecode());
+	       
+	       //insert to postgres as blob
+	       File pdf = File.createTempFile("report.getReporttemplatename()", "."+report.getReportoutputtypecode());
+	       JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+	       byte[] pdfByte = Files.readAllBytes(pdf.toPath());
+
+	       return pdfByte;
 	        
 	}
 	
 	
-	public void generateReport(Report report,String parameters) throws Exception{
+	public byte[] generateReport(Report report,String parameters) throws Exception{
+		 byte[] pdfbyte = null;
 		if(jasperConfiguration.getReportingengine().equals("jasperengine")){
-			generateReportEngine(report, parameters);
 			System.out.println("jasper engine");
+			pdfbyte=generateReportEngine(report, parameters);
 		}else if(jasperConfiguration.getReportingengine().equals("jasperserver")){
-			generateReportRestClient(report, parameters);
 			System.out.println("jasper server");
+			pdfbyte=generateReportRestClient(report, parameters);
 		}
+		return pdfbyte;
 	}
 	
 }

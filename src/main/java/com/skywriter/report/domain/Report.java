@@ -55,6 +55,11 @@ public class Report implements Serializable {
 
     @Column(name = "domain")
     private String domain;
+    
+    @Lob
+    @Column(name = "reportfile")
+    private byte[] reportfile;
+    
 
     @OneToMany(mappedBy = "report")
     @JsonIgnore
@@ -161,7 +166,15 @@ public class Report implements Serializable {
         this.domain = domain;
     }
 
-    public Set<Reportparameter> getReportparameters() {
+    public byte[] getReportfile() {
+		return reportfile;
+	}
+
+	public void setReportfile(byte[] reportfile) {
+		this.reportfile = reportfile;
+	}
+
+	public Set<Reportparameter> getReportparameters() {
         return reportparameters;
     }
 

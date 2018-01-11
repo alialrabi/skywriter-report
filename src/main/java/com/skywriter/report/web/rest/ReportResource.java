@@ -188,7 +188,9 @@ public class ReportResource {
     	 String reportId=request.getParameter("reportId");
     	 String parameters=request.getParameter("parameters");
          Report report = reportRepository.findOne(Long.parseLong(reportId));
-         generateReportFile.generateReport(report, parameters);
+         byte[] generatedpdf=generateReportFile.generateReport(report, parameters);
+         report.setReportfile(generatedpdf);
+         reportRepository.save(report);
 
          }
     

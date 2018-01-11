@@ -2,10 +2,10 @@ package com.skywriter.report.service.dto;
 
 
 import java.time.ZonedDateTime;
+
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -34,6 +34,9 @@ public class ReportDTO implements Serializable {
 
     private String domain;
 
+    @Lob
+    private byte[] reportfile;
+    
     public Long getId() {
         return id;
     }
