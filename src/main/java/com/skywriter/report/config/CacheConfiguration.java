@@ -43,6 +43,7 @@ public class CacheConfiguration {
             cm.createCache(com.skywriter.report.domain.Report.class.getName(), jcacheConfiguration);
             cm.createCache(com.skywriter.report.domain.Report.class.getName() + ".reportparameters", jcacheConfiguration);
             cm.createCache(com.skywriter.report.domain.Reportparameter.class.getName(), jcacheConfiguration);
+            cm.createCache(com.skywriter.report.domain.Reportclass.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -1,0 +1,37 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastmodifiedby",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastmodifieddatetime",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "domain",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180123093451",
+    "dto": "mapstruct",
+    "service": "no",
+    "entityTableName": "reportclass",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination",
+    "microserviceName": "report",
+    "searchEngine": "elasticsearch"
+}
