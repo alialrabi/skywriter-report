@@ -1,6 +1,13 @@
 {
     "fluentMethods": true,
-    "relationships": [],
+    "relationships": [ 
+        {
+            "relationshipName": "report",
+            "otherEntityName": "report",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "reportclass"
+        }
+    ],
     "fields": [
         {
             "fieldName": "name",
