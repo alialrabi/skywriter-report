@@ -15,7 +15,7 @@ public class DBConnection {
 		                e.printStackTrace();
 		            }  
 		         try {
-					conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/skywriter","postgres","postgres");
+					conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/response","postgres","postgres");
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

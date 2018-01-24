@@ -89,7 +89,8 @@ jasper:
     reportingengine: jasperengine
   #  reportingengine: jasperserver
      
-
+user:
+   domain: DEV 
 # ===================================================================
 # To enable SSL, generate a certificate using:
 # keytool -genkey -alias report -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650

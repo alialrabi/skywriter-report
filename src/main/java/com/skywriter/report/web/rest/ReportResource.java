@@ -12,6 +12,7 @@ import com.skywriter.report.repository.search.ReportSearchRepository;
 import com.skywriter.report.web.rest.errors.BadRequestAlertException;
 import com.skywriter.report.web.rest.util.HeaderUtil;
 import com.skywriter.report.web.rest.util.PaginationUtil;
+import com.skywriter.report.service.DomainService;
 import com.skywriter.report.service.dto.ReportDTO;
 import com.skywriter.report.service.mapper.ReportMapper;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -30,6 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +57,8 @@ public class ReportResource {
     
     private final ReportparameterRepository reportparameterRepository;
     
+    @Inject
+    DomainService domainService;
 
     @Inject
     GenerateReportFile generateReportFile; 
@@ -80,6 +85,10 @@ public class ReportResource {
             throw new BadRequestAlertException("A new report cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Report report = reportMapper.toEntity(reportDTO);
+        ZonedDateTime lastmodifieddate = ZonedDateTime.now(ZoneId.systemDefault());
+        report.setLastmodifieddatetime(lastmodifieddate);
+        report.setDomain(domainService.getDomain());
+        report.setStatus("Active");
         report = reportRepository.save(report);
         ReportDTO result = reportMapper.toDto(report);
         reportSearchRepository.save(report);
@@ -105,6 +114,10 @@ public class ReportResource {
             return createReport(reportDTO);
         }
         Report report = reportMapper.toEntity(reportDTO);
+        ZonedDateTime lastmodifieddate = ZonedDateTime.now(ZoneId.systemDefault());
+        report.setLastmodifieddatetime(lastmodifieddate);
+        report.setDomain(domainService.getDomain());
+        report.setStatus("Active");
         report = reportRepository.save(report);
         ReportDTO result = reportMapper.toDto(report);
         reportSearchRepository.save(report);
@@ -184,16 +197,16 @@ public class ReportResource {
      */
     @PostMapping("/generateReport")
     @Timed
-    public void generateReport(MultipartHttpServletRequest request) throws Exception {
+    public ResponseEntity<byte[]> generateReport(MultipartHttpServletRequest request) throws Exception {
     	 String reportId=request.getParameter("reportId");
     	 String parameters=request.getParameter("parameters");
          Report report = reportRepository.findOne(Long.parseLong(reportId));
-         byte[] generatedpdf=generateReportFile.generateReport(report, parameters);
+         byte[] generatedpdf=generateReportFile.generateReport(report, parameters,report.getJrxmlfile());
          System.out.println("output file");
          System.out.println(generatedpdf);
          report.setReportfile(generatedpdf);
          reportRepository.save(report);
-
+           return new ResponseEntity<>(generatedpdf, HttpStatus.OK);
          }
     
     /**

@@ -42,11 +42,9 @@ public class Report implements Serializable {
     @Column(name = "reportoutputtypecode", nullable = false)
     private String reportoutputtypecode;
 
-    @NotNull
     @Column(name = "status", nullable = false)
     private String status;
 
-    @NotNull
     @Column(name = "lastmodifiedby", nullable = false)
     private String lastmodifiedby;
 
@@ -56,15 +54,32 @@ public class Report implements Serializable {
     @Column(name = "domain")
     private String domain;
     
+    @Column(name = "bucket")
+    private String bucket;
+
     @Lob
     @Column(name = "reportfile")
     private byte[] reportfile;
+
+    @Column(name = "reportfile_content_type")
+    private String reportfileContentType;
+
+    @Lob
+    @Column(name = "jrxmlfile")
+    private byte[] jrxmlfile;
+
+    @Column(name = "jrxmlfile_content_type")
+    private String jrxmlfileContentType;
+    
     
 
     @OneToMany(mappedBy = "report")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Reportparameter> reportparameters = new HashSet<>();
+    
+    @ManyToOne
+    private Reportclass reportclass;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -167,14 +182,67 @@ public class Report implements Serializable {
     }
 
     public byte[] getReportfile() {
-		return reportfile;
+        return reportfile;
+    }
+
+    public Report reportfile(byte[] reportfile) {
+        this.reportfile = reportfile;
+        return this;
+    }
+
+    public void setReportfile(byte[] reportfile) {
+        this.reportfile = reportfile;
+    }
+
+    public String getReportfileContentType() {
+        return reportfileContentType;
+    }
+
+    public Report reportfileContentType(String reportfileContentType) {
+        this.reportfileContentType = reportfileContentType;
+        return this;
+    }
+    
+
+    public Reportclass getReportclass() {
+		return reportclass;
 	}
 
-	public void setReportfile(byte[] reportfile) {
-		this.reportfile = reportfile;
+	public void setReportclass(Reportclass reportclass) {
+		this.reportclass = reportclass;
 	}
 
-	public Set<Reportparameter> getReportparameters() {
+	public void setReportfileContentType(String reportfileContentType) {
+        this.reportfileContentType = reportfileContentType;
+    }
+
+    public byte[] getJrxmlfile() {
+        return jrxmlfile;
+    }
+
+    public Report jrxmlfile(byte[] jrxmlfile) {
+        this.jrxmlfile = jrxmlfile;
+        return this;
+    }
+
+    public void setJrxmlfile(byte[] jrxmlfile) {
+        this.jrxmlfile = jrxmlfile;
+    }
+
+    public String getJrxmlfileContentType() {
+        return jrxmlfileContentType;
+    }
+
+    public Report jrxmlfileContentType(String jrxmlfileContentType) {
+        this.jrxmlfileContentType = jrxmlfileContentType;
+        return this;
+    }
+
+    public void setJrxmlfileContentType(String jrxmlfileContentType) {
+        this.jrxmlfileContentType = jrxmlfileContentType;
+    }
+
+    public Set<Reportparameter> getReportparameters() {
         return reportparameters;
     }
 
@@ -198,9 +266,19 @@ public class Report implements Serializable {
     public void setReportparameters(Set<Reportparameter> reportparameters) {
         this.reportparameters = reportparameters;
     }
+    
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @Override
+    public String getBucket() {
+		return bucket;
+	}
+
+	public void setBucket(String bucket) {
+		this.bucket = bucket;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -231,6 +309,10 @@ public class Report implements Serializable {
             ", lastmodifiedby='" + getLastmodifiedby() + "'" +
             ", lastmodifieddatetime='" + getLastmodifieddatetime() + "'" +
             ", domain='" + getDomain() + "'" +
+            ", reportfile='" + getReportfile() + "'" +
+            ", reportfileContentType='" + getReportfileContentType() + "'" +
+            ", jrxmlfile='" + getJrxmlfile() + "'" +
+            ", jrxmlfileContentType='" + getJrxmlfileContentType() + "'" +
             "}";
     }
 }

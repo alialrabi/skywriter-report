@@ -7,9 +7,14 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Reportclass.
@@ -42,6 +47,11 @@ public class Reportclass implements Serializable {
 
     @Column(name = "domain")
     private String domain;
+    
+    @OneToMany(mappedBy = "reportclass")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Report> report = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -116,9 +126,18 @@ public class Reportclass implements Serializable {
     public void setDomain(String domain) {
         this.domain = domain;
     }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @Override
+    public Set<Report> getReport() {
+		return report;
+	}
+
+	public void setReport(Set<Report> report) {
+		this.report = report;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

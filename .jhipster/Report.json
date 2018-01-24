@@ -6,6 +6,12 @@
             "otherEntityName": "reportparameter",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "report"
+        },
+        {
+            "relationshipName": "reportclass",
+            "otherEntityName": "reportclass",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
         }
     ],
     "fields": [
@@ -45,6 +51,13 @@
             ]
         },
         {
+            "fieldName": "bucket",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "lastmodifieddatetime",
             "fieldType": "ZonedDateTime"
         },
@@ -54,6 +67,11 @@
         },
         {
             "fieldName": "reportfile",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        },
+        {
+            "fieldName": "jrxmlfile",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any"
         }

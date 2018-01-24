@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -68,6 +69,16 @@ public class ReportResourceIntTest {
 
     private static final String DEFAULT_DOMAIN = "AAAAAAAAAA";
     private static final String UPDATED_DOMAIN = "BBBBBBBBBB";
+
+    private static final byte[] DEFAULT_REPORTFILE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_REPORTFILE = TestUtil.createByteArray(2, "1");
+    private static final String DEFAULT_REPORTFILE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_REPORTFILE_CONTENT_TYPE = "image/png";
+
+    private static final byte[] DEFAULT_JRXMLFILE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_JRXMLFILE = TestUtil.createByteArray(2, "1");
+    private static final String DEFAULT_JRXMLFILE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_JRXMLFILE_CONTENT_TYPE = "image/png";
 
     @Autowired
     private ReportRepository reportRepository;
@@ -119,7 +130,11 @@ public class ReportResourceIntTest {
             .status(DEFAULT_STATUS)
             .lastmodifiedby(DEFAULT_LASTMODIFIEDBY)
             .lastmodifieddatetime(DEFAULT_LASTMODIFIEDDATETIME)
-            .domain(DEFAULT_DOMAIN);
+            .domain(DEFAULT_DOMAIN)
+            .reportfile(DEFAULT_REPORTFILE)
+            .reportfileContentType(DEFAULT_REPORTFILE_CONTENT_TYPE)
+            .jrxmlfile(DEFAULT_JRXMLFILE)
+            .jrxmlfileContentType(DEFAULT_JRXMLFILE_CONTENT_TYPE);
         return report;
     }
 
@@ -152,6 +167,10 @@ public class ReportResourceIntTest {
         assertThat(testReport.getLastmodifiedby()).isEqualTo(DEFAULT_LASTMODIFIEDBY);
         assertThat(testReport.getLastmodifieddatetime()).isEqualTo(DEFAULT_LASTMODIFIEDDATETIME);
         assertThat(testReport.getDomain()).isEqualTo(DEFAULT_DOMAIN);
+        assertThat(testReport.getReportfile()).isEqualTo(DEFAULT_REPORTFILE);
+        assertThat(testReport.getReportfileContentType()).isEqualTo(DEFAULT_REPORTFILE_CONTENT_TYPE);
+        assertThat(testReport.getJrxmlfile()).isEqualTo(DEFAULT_JRXMLFILE);
+        assertThat(testReport.getJrxmlfileContentType()).isEqualTo(DEFAULT_JRXMLFILE_CONTENT_TYPE);
 
         // Validate the Report in Elasticsearch
         Report reportEs = reportSearchRepository.findOne(testReport.getId());
@@ -291,7 +310,11 @@ public class ReportResourceIntTest {
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].lastmodifiedby").value(hasItem(DEFAULT_LASTMODIFIEDBY.toString())))
             .andExpect(jsonPath("$.[*].lastmodifieddatetime").value(hasItem(sameInstant(DEFAULT_LASTMODIFIEDDATETIME))))
-            .andExpect(jsonPath("$.[*].domain").value(hasItem(DEFAULT_DOMAIN.toString())));
+            .andExpect(jsonPath("$.[*].domain").value(hasItem(DEFAULT_DOMAIN.toString())))
+            .andExpect(jsonPath("$.[*].reportfileContentType").value(hasItem(DEFAULT_REPORTFILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].reportfile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORTFILE))))
+            .andExpect(jsonPath("$.[*].jrxmlfileContentType").value(hasItem(DEFAULT_JRXMLFILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].jrxmlfile").value(hasItem(Base64Utils.encodeToString(DEFAULT_JRXMLFILE))));
     }
 
     @Test
@@ -311,7 +334,11 @@ public class ReportResourceIntTest {
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
             .andExpect(jsonPath("$.lastmodifiedby").value(DEFAULT_LASTMODIFIEDBY.toString()))
             .andExpect(jsonPath("$.lastmodifieddatetime").value(sameInstant(DEFAULT_LASTMODIFIEDDATETIME)))
-            .andExpect(jsonPath("$.domain").value(DEFAULT_DOMAIN.toString()));
+            .andExpect(jsonPath("$.domain").value(DEFAULT_DOMAIN.toString()))
+            .andExpect(jsonPath("$.reportfileContentType").value(DEFAULT_REPORTFILE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.reportfile").value(Base64Utils.encodeToString(DEFAULT_REPORTFILE)))
+            .andExpect(jsonPath("$.jrxmlfileContentType").value(DEFAULT_JRXMLFILE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.jrxmlfile").value(Base64Utils.encodeToString(DEFAULT_JRXMLFILE)));
     }
 
     @Test
@@ -341,7 +368,11 @@ public class ReportResourceIntTest {
             .status(UPDATED_STATUS)
             .lastmodifiedby(UPDATED_LASTMODIFIEDBY)
             .lastmodifieddatetime(UPDATED_LASTMODIFIEDDATETIME)
-            .domain(UPDATED_DOMAIN);
+            .domain(UPDATED_DOMAIN)
+            .reportfile(UPDATED_REPORTFILE)
+            .reportfileContentType(UPDATED_REPORTFILE_CONTENT_TYPE)
+            .jrxmlfile(UPDATED_JRXMLFILE)
+            .jrxmlfileContentType(UPDATED_JRXMLFILE_CONTENT_TYPE);
         ReportDTO reportDTO = reportMapper.toDto(updatedReport);
 
         restReportMockMvc.perform(put("/api/reports")
@@ -360,6 +391,10 @@ public class ReportResourceIntTest {
         assertThat(testReport.getLastmodifiedby()).isEqualTo(UPDATED_LASTMODIFIEDBY);
         assertThat(testReport.getLastmodifieddatetime()).isEqualTo(UPDATED_LASTMODIFIEDDATETIME);
         assertThat(testReport.getDomain()).isEqualTo(UPDATED_DOMAIN);
+        assertThat(testReport.getReportfile()).isEqualTo(UPDATED_REPORTFILE);
+        assertThat(testReport.getReportfileContentType()).isEqualTo(UPDATED_REPORTFILE_CONTENT_TYPE);
+        assertThat(testReport.getJrxmlfile()).isEqualTo(UPDATED_JRXMLFILE);
+        assertThat(testReport.getJrxmlfileContentType()).isEqualTo(UPDATED_JRXMLFILE_CONTENT_TYPE);
 
         // Validate the Report in Elasticsearch
         Report reportEs = reportSearchRepository.findOne(testReport.getId());
@@ -426,7 +461,11 @@ public class ReportResourceIntTest {
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].lastmodifiedby").value(hasItem(DEFAULT_LASTMODIFIEDBY.toString())))
             .andExpect(jsonPath("$.[*].lastmodifieddatetime").value(hasItem(sameInstant(DEFAULT_LASTMODIFIEDDATETIME))))
-            .andExpect(jsonPath("$.[*].domain").value(hasItem(DEFAULT_DOMAIN.toString())));
+            .andExpect(jsonPath("$.[*].domain").value(hasItem(DEFAULT_DOMAIN.toString())))
+            .andExpect(jsonPath("$.[*].reportfileContentType").value(hasItem(DEFAULT_REPORTFILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].reportfile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORTFILE))))
+            .andExpect(jsonPath("$.[*].jrxmlfileContentType").value(hasItem(DEFAULT_JRXMLFILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].jrxmlfile").value(hasItem(Base64Utils.encodeToString(DEFAULT_JRXMLFILE))));
     }
 
     @Test

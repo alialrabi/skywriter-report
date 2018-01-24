@@ -2,11 +2,12 @@ package com.skywriter.report.service.dto;
 
 
 import java.time.ZonedDateTime;
-
-import javax.persistence.Lob;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the Report entity.
@@ -24,19 +25,26 @@ public class ReportDTO implements Serializable {
     @NotNull
     private String reportoutputtypecode;
 
-    @NotNull
     private String status;
 
-    @NotNull
     private String lastmodifiedby;
 
     private ZonedDateTime lastmodifieddatetime;
 
     private String domain;
+    
+    private String bucket;
 
     @Lob
     private byte[] reportfile;
+    private String reportfileContentType;
+
+    @Lob
+    private byte[] jrxmlfile;
+    private String jrxmlfileContentType;
     
+    private Long reportclassId;
+
     public Long getId() {
         return id;
     }
@@ -73,7 +81,15 @@ public class ReportDTO implements Serializable {
         return status;
     }
 
-    public void setStatus(String status) {
+    public String getBucket() {
+		return bucket;
+	}
+
+	public void setBucket(String bucket) {
+		this.bucket = bucket;
+	}
+
+	public void setStatus(String status) {
         this.status = status;
     }
 
@@ -101,7 +117,47 @@ public class ReportDTO implements Serializable {
         this.domain = domain;
     }
 
-    @Override
+    public byte[] getReportfile() {
+        return reportfile;
+    }
+
+    public void setReportfile(byte[] reportfile) {
+        this.reportfile = reportfile;
+    }
+
+    public String getReportfileContentType() {
+        return reportfileContentType;
+    }
+
+    public void setReportfileContentType(String reportfileContentType) {
+        this.reportfileContentType = reportfileContentType;
+    }
+
+    public byte[] getJrxmlfile() {
+        return jrxmlfile;
+    }
+
+    public void setJrxmlfile(byte[] jrxmlfile) {
+        this.jrxmlfile = jrxmlfile;
+    }
+
+    public String getJrxmlfileContentType() {
+        return jrxmlfileContentType;
+    }
+
+    public void setJrxmlfileContentType(String jrxmlfileContentType) {
+        this.jrxmlfileContentType = jrxmlfileContentType;
+    }
+
+    public Long getReportclassId() {
+		return reportclassId;
+	}
+
+	public void setReportclassId(Long reportclassId) {
+		this.reportclassId = reportclassId;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -133,6 +189,8 @@ public class ReportDTO implements Serializable {
             ", lastmodifiedby='" + getLastmodifiedby() + "'" +
             ", lastmodifieddatetime='" + getLastmodifieddatetime() + "'" +
             ", domain='" + getDomain() + "'" +
+            ", reportfile='" + getReportfile() + "'" +
+            ", jrxmlfile='" + getJrxmlfile() + "'" +
             "}";
     }
 }

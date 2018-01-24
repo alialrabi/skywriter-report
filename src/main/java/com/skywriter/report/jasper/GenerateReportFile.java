@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ws.rs.core.MediaType;
+
+import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -102,11 +104,15 @@ public class GenerateReportFile {
 	 * @throws JsonMappingException 
 	 * @throws JsonParseException 
 	 */
-	public byte[] generateReportEngine(Report report,String params) throws JRException, JsonParseException, JsonMappingException, IOException{
+	public byte[] generateReportEngine(Report report,String params,byte[] jrxmlbyte) throws JRException, JsonParseException, JsonMappingException, IOException{
 		DBConnection connection=new DBConnection();
-				
+		String jrxmlfile;
+	     
+		File file = File.createTempFile("file",".jrxml");
+		FileUtils.writeByteArrayToFile(file, jrxmlbyte);
+
 		JasperReport jasperReport = JasperCompileManager
-	               .compileReport(jasperConfiguration.getJrxmlpath()+report.getReporttemplatename()+".jrxml");
+	               .compileReport(file.getAbsolutePath());
 	       ObjectMapper mapper = new ObjectMapper();
    	       List<Parameters> objects = mapper.readValue(params, new TypeReference<List<Parameters>>(){});
            Map<String,Object> parametersMap=new HashMap<String,Object>();
@@ -117,25 +123,18 @@ public class GenerateReportFile {
 	       JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,
 	               parametersMap, connection.getConnection());
 
-	       //Insert to Resources directory
-	       //JasperExportManager.exportReportToPdfFile(jasperPrint,
-	         //      jasperConfiguration.getReportpath()+report.getReporttemplatename()+"."+report.getReportoutputtypecode());
-	       
-	       //insert to postgres as blob
-	       File pdf = File.createTempFile("report.getReporttemplatename()", "."+report.getReportoutputtypecode());
-	       JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-	       byte[] pdfByte = Files.readAllBytes(pdf.toPath());
+	       byte[] pdfByte=JasperExportManager.exportReportToPdf(jasperPrint);
 
 	       return pdfByte;
 	        
 	}
 	
 	
-	public byte[] generateReport(Report report,String parameters) throws Exception{
+	public byte[] generateReport(Report report,String parameters,byte[] jrxmlbyte) throws Exception{
 		 byte[] pdfbyte = null;
 		if(jasperConfiguration.getReportingengine().equals("jasperengine")){
 			System.out.println("jasper engine");
-			pdfbyte=generateReportEngine(report, parameters);
+			pdfbyte=generateReportEngine(report, parameters,jrxmlbyte);
 		}else if(jasperConfiguration.getReportingengine().equals("jasperserver")){
 			System.out.println("jasper server");
 			pdfbyte=generateReportRestClient(report, parameters);

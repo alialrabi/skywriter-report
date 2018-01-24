@@ -52,6 +52,24 @@
             <column name="reportfile" type="longblob">
                 <constraints nullable="true" />
             </column>
+            <column name="reportfile_content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="jrxmlfile" type="longblob">
+                <constraints nullable="true" />
+            </column>
+            <column name="jrxmlfile_content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            
+              <column name="reportclass_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+              <column name="bucket" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="report" columnName="lastmodifieddatetime" columnDataType="datetime"/>
